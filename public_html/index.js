@@ -2,12 +2,13 @@ $(loaded);
 
 function loaded() {
     loadTodo();
+    setChangedEvent();
 
     $('#formButton').click(function () {
         saveText();
         loadTodo();
+        setChangedEvent();
     });
-
 }
 
 function loadTodo() {
@@ -31,7 +32,7 @@ function loadTodo() {
     todoList.append(unsolved.join(''));
     solved.reverse();
     solvedTodoList.append(solved.join(''));
-
+    
     loadICheck();
 }
 
@@ -47,12 +48,17 @@ function loadICheck() {
             insert: '<div class="icheck_line-icon"></div>' + labelText
         });
     });
+    setChangedEvent();
+}
+
+function setChangedEvent() {
     $(".todo").on("ifChanged", function (evt) {
         var key = evt.currentTarget.id;
         var data = loadData(key);
         var checked = $(this).prop("checked");
         data.checked = checked;
         saveData(data, key);
+        loadTodo();
     });
 }
 
