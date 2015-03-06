@@ -2,12 +2,10 @@ $(loaded);
 
 function loaded() {
     loadTodo();
-    setChangedEvent();
 
     $('#formButton').click(function () {
         saveText();
         loadTodo();
-        setChangedEvent();
     });
 }
 
