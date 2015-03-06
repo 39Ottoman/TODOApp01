@@ -7,6 +7,16 @@ function loaded() {
         createData();
         loadTodo();
     });
+    
+    $('#removeSolvedTodo').click(function() {
+        if(confirm('remove solved TODO?')) {
+            $('.checked').each(function() {
+                var key = $(this).context.firstChild.id;
+                localStorage.removeItem(key);
+            });
+            loadTodo();
+        }
+    });
 }
 
 function loadTodo() {
