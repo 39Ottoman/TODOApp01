@@ -23,14 +23,11 @@ function loadICheck() {
         });
     });
     $(".todo").on("ifChanged", function (evt) {
-        console.log(evt.currentTarget.id);
         var key = evt.currentTarget.id;
-        var data = JSON.parse(escapeText(unescape(localStorage.getItem(key))));
-        console.log("29", data);
+        var data = loadData(key);
         var checked = $(this).prop("checked");
         data.checked = checked;
-        var val = escapeText(JSON.stringify(data));
-        localStorage.setItem(key, escape(val));
+        saveData(data, key);
     });
 }
 
@@ -50,17 +47,24 @@ function saveText() {
 function loadTodo() {
     var todoList = $("#todoList");
     todoList.children().remove();
+    var solvedTodoList = $("#solvedTodoList");
+    solvedTodoList.children().remove();
 
-    var key, value, checked, unsolved = [];
+    var key, value, unsolved = [], solved = [];
     for (var i = 0; i < localStorage.length; i++) {
         key = localStorage.key(i);
-        value = JSON.parse(escapeText(unescape(localStorage.getItem(key))));
-        checked = value.checked ? "checked" : "";
-        unsolved.push('<input type="checkbox" class ="todo" id="' + key + '" ' + checked + '><label for="' + key + '">' + value.text + '</label>');
+        value = loadData(key);
         
+        if(value.checked) {
+            solved.push('<input type="checkbox" class ="todo" id="' + key + '" checked><label for="' + key + '">' + value.text + '</label>');
+        } else {
+            unsolved.push('<input type="checkbox" class ="todo" id="' + key + '"><label for="' + key + '">' + value.text + '</label>');
+        }
     }
     unsolved.reverse();
     todoList.append(unsolved.join(''));
+    solved.reverse();
+    solvedTodoList.append(solved.join(''));
 
     loadICheck();
 }
@@ -78,7 +82,7 @@ function checkText(text) {
     var length = localStorage.length;
     for (var i = 0; i < length; i++) {
         var key = localStorage.key(i);
-        var value = localStorage.getItem(key);
+        var value = loadData(key).text;
         if (text === value) {
             alert("同じ内容は避けてください");
             return false;
@@ -88,13 +92,13 @@ function checkText(text) {
     return true;
 }
 
-function saveData(data) {
-    var time = new Date();
+function saveData(data, time) {
+    time = (time === undefined)? new Date(): time;
     var text = escapeText(JSON.stringify(data));
     console.log("save: " + text);
     localStorage.setItem(time, escape(text));
 }
 
-function loadData(text) {
-
+function loadData(time) {
+    return JSON.parse(escapeText(unescape(localStorage.getItem(time))));
 }
