@@ -10,6 +10,31 @@ function loaded() {
 
 }
 
+function loadTodo() {
+    var todoList = $("#todoList");
+    todoList.children().remove();
+    var solvedTodoList = $("#solvedTodoList");
+    solvedTodoList.children().remove();
+
+    var key, value, unsolved = [], solved = [];
+    for (var i = 0; i < localStorage.length; i++) {
+        key = localStorage.key(i);
+        value = loadData(key);
+        
+        if(value.checked) {
+            solved.push('<input type="checkbox" class ="todo" id="' + key + '" checked><label for="' + key + '">' + value.text + '</label>');
+        } else {
+            unsolved.push('<input type="checkbox" class ="todo" id="' + key + '"><label for="' + key + '">' + value.text + '</label>');
+        }
+    }
+    unsolved.reverse();
+    todoList.append(unsolved.join(''));
+    solved.reverse();
+    solvedTodoList.append(solved.join(''));
+
+    loadICheck();
+}
+
 function loadICheck() {
     $(".todo").each(function () {
         var self = $(this);
@@ -44,31 +69,6 @@ function saveText() {
     }
 }
 
-function loadTodo() {
-    var todoList = $("#todoList");
-    todoList.children().remove();
-    var solvedTodoList = $("#solvedTodoList");
-    solvedTodoList.children().remove();
-
-    var key, value, unsolved = [], solved = [];
-    for (var i = 0; i < localStorage.length; i++) {
-        key = localStorage.key(i);
-        value = loadData(key);
-        
-        if(value.checked) {
-            solved.push('<input type="checkbox" class ="todo" id="' + key + '" checked><label for="' + key + '">' + value.text + '</label>');
-        } else {
-            unsolved.push('<input type="checkbox" class ="todo" id="' + key + '"><label for="' + key + '">' + value.text + '</label>');
-        }
-    }
-    unsolved.reverse();
-    todoList.append(unsolved.join(''));
-    solved.reverse();
-    solvedTodoList.append(solved.join(''));
-
-    loadICheck();
-}
-
 function escapeText(text) {
     return $('<div>').text(text).html();
 }
@@ -88,7 +88,6 @@ function checkText(text) {
             return false;
         }
     }
-
     return true;
 }
 
