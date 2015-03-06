@@ -9,7 +9,7 @@ function loaded() {
     });
     
     $('#removeSolvedTodo').click(function() {
-        if(confirm('remove solved TODO?')) {
+        if(confirm('解決済のTODOを削除しますか?')) {
             $('.checked').each(function() {
                 var key = $(this).context.firstChild.id;
                 localStorage.removeItem(key);
@@ -30,11 +30,12 @@ function loadTodo() {
         key = localStorage.key(i);
         data = loadData(key);
         var text = escapeText(escapeText(data.text));
+        var deadline = data.deadline === ''? '' : '　(' + new Date(data.deadline).toLocaleDateString() + 'まで)';
         
         if(data.checked) {
-            solved.push('<input type="checkbox" class ="todo" id="' + key + '" checked><label for="' + key + '">' + text + '</label>');
+            solved.push('<input type="checkbox" class ="todo" id="' + key + '" checked><label for="' + key + '">' + text + deadline + '</label>');
         } else {
-            unsolved.push('<input type="checkbox" class ="todo" id="' + key + '"><label for="' + key + '">' + text + '</label>');
+            unsolved.push('<input type="checkbox" class ="todo" id="' + key + '"><label for="' + key + '">' + text + deadline + '</label>');
         }
     }
     unsolved.reverse();
@@ -71,14 +72,17 @@ function loadICheck() {
 
 function createData() {
     var text = $("#formText");
+    var deadline = $("#formDateTime");
 
     if (checkText(text.val())) {
         var data = {
             text: text.val(),
-            checked: false
+            checked: false,
+            deadline: deadline.val()
         };
         saveData(data);
         text.val("");
+        deadline.val("");
     }
 }
 
@@ -106,9 +110,7 @@ function checkText(text) {
 
 function saveData(data, time) {
     time = (time === undefined)? new Date(): time;
-    var text = JSON.stringify(data);
-    console.log("save: " + text);
-    localStorage.setItem(time, escape(text));
+    localStorage.setItem(time, escape(JSON.stringify(data)));
 }
 
 function loadData(time) {
