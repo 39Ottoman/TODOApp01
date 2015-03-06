@@ -4,7 +4,7 @@ function loaded() {
     loadTodo();
 
     $('#formButton').click(function () {
-        saveText();
+        createData();
         loadTodo();
     });
 }
@@ -58,7 +58,7 @@ function loadICheck() {
     });
 }
 
-function saveText() {
+function createData() {
     var text = $("#formText");
 
     if (checkText(text.val())) {
