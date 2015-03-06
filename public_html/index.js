@@ -20,24 +20,24 @@ function loaded() {
 }
 
 function loadTodo() {
-    var todoList = $("#todoList");
-    todoList.children().remove();
+    var unsolvedTodoList = $("#unsolvedTodoList");
+    unsolvedTodoList.children().remove();
     var solvedTodoList = $("#solvedTodoList");
     solvedTodoList.children().remove();
 
-    var key, value, unsolved = [], solved = [];
+    var key, data, unsolved = [], solved = [];
     for (var i = 0; i < localStorage.length; i++) {
         key = localStorage.key(i);
-        value = loadData(key);
+        data = loadData(key);
         
-        if(value.checked) {
-            solved.push('<input type="checkbox" class ="todo" id="' + key + '" checked><label for="' + key + '">' + value.text + '</label>');
+        if(data.checked) {
+            solved.push('<input type="checkbox" class ="todo" id="' + key + '" checked><label for="' + key + '">' + data.text + '</label>');
         } else {
-            unsolved.push('<input type="checkbox" class ="todo" id="' + key + '"><label for="' + key + '">' + value.text + '</label>');
+            unsolved.push('<input type="checkbox" class ="todo" id="' + key + '"><label for="' + key + '">' + data.text + '</label>');
         }
     }
     unsolved.reverse();
-    todoList.append(unsolved.join(''));
+    unsolvedTodoList.append(unsolved.join(''));
     solved.reverse();
     solvedTodoList.append(solved.join(''));
     
