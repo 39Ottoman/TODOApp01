@@ -41,15 +41,13 @@ function loadICheck() {
         var labelText = label.text();
 
         label.remove();
+        var color = self.prop("checked")? "aero": "red";
         self.iCheck({
-            checkboxClass: 'icheckbox_line-aero',
+            checkboxClass: 'icheckbox_line-' + color,
             insert: '<div class="icheck_line-icon"></div>' + labelText
         });
     });
-    setChangedEvent();
-}
-
-function setChangedEvent() {
+    
     $(".todo").on("ifChanged", function (evt) {
         var key = evt.currentTarget.id;
         var data = loadData(key);
