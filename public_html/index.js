@@ -29,11 +29,12 @@ function loadTodo() {
     for (var i = 0; i < localStorage.length; i++) {
         key = localStorage.key(i);
         data = loadData(key);
+        var text = escapeText(escapeText(data.text));
         
         if(data.checked) {
-            solved.push('<input type="checkbox" class ="todo" id="' + key + '" checked><label for="' + key + '">' + data.text + '</label>');
+            solved.push('<input type="checkbox" class ="todo" id="' + key + '" checked><label for="' + key + '">' + text + '</label>');
         } else {
-            unsolved.push('<input type="checkbox" class ="todo" id="' + key + '"><label for="' + key + '">' + data.text + '</label>');
+            unsolved.push('<input type="checkbox" class ="todo" id="' + key + '"><label for="' + key + '">' + text + '</label>');
         }
     }
     unsolved.reverse();
@@ -51,7 +52,7 @@ function loadICheck() {
         var labelText = label.text();
 
         label.remove();
-        var color = self.prop("checked")? "aero": "red";
+        var color = self.prop("checked")? "blue": "red";
         self.iCheck({
             checkboxClass: 'icheckbox_line-' + color,
             insert: '<div class="icheck_line-icon"></div>' + labelText
@@ -105,11 +106,11 @@ function checkText(text) {
 
 function saveData(data, time) {
     time = (time === undefined)? new Date(): time;
-    var text = escapeText(JSON.stringify(data));
+    var text = JSON.stringify(data);
     console.log("save: " + text);
     localStorage.setItem(time, escape(text));
 }
 
 function loadData(time) {
-    return JSON.parse(escapeText(unescape(localStorage.getItem(time))));
+    return JSON.parse(unescape(localStorage.getItem(time)));
 }
