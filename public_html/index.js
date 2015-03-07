@@ -91,8 +91,8 @@ function escapeText(text) {
 }
 
 function checkText(text) {
-    if (0 === text.length) {
-        alert("文字数は1字以上にしてください");
+    if (0 === text.length || 20 < text.length) {
+        alert("文字数は1～20字にしてください");
         return false;
     }
 
